@@ -22,7 +22,13 @@ public class MQTTBroker {
 
         var server = new TCPServer(port);
         
+        // A queue for sending message sequentially
         BlockingQueue<MQTTMessage> messageQueue = new ArrayBlockingQueue<>(1000);
+
+        // A list of subscribers (note that we don't use a dictionary type 
+        // because to send a message we have to go through all subscribers,
+        // the reason is that a subscriber may listen with a wildcard expression,
+        // so dictionary exact matching won't work)
         List<SubscriberSocket> subscriberList = Collections.synchronizedList(new ArrayList<>());
         
         while(true) {

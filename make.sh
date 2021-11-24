@@ -1,9 +1,5 @@
 mkdir -p out
 javac $(find . -name "*.java")
-cd client
-jar cfe ../out/client.jar FTPClient *.class
-cd ../server
-jar cfe ../out/server.jar FTPServer *.class
-cd ..
+jar cfe ./out/broker.jar ./broker MQTTBroker *.class
 find . -name "*.class" -type f -delete
 echo 'OK'
