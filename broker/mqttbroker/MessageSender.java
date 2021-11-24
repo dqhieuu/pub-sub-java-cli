@@ -22,7 +22,6 @@ public class MessageSender implements Runnable{
 
             while (messageQueue.size() > 0) {
                 MQTTMessage pubMessage = messageQueue.poll();
-
                 for (SubscriberSocket sub: subscriberList) {
                     for (TopicTree topic: sub.topicTrees) {
                         if (topic.contains(pubMessage.topicTree)) {

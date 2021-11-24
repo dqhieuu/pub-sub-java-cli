@@ -49,7 +49,7 @@ public class PubSubConnection extends TCPServerConnection implements Runnable {
                     if(response.equals("HELO AS PUB")){
                         printClientAction("connected as publisher.");
                         send("200 HI");
-                        curState = State.SUB_READ;
+                        curState = State.PUB_LISTEN;
                         
                     } else if (response.equals("HELO AS SUB")) {
                         printClientAction("connected as subscriber.");
@@ -57,7 +57,7 @@ public class PubSubConnection extends TCPServerConnection implements Runnable {
                         subscriber = new SubscriberSocket(this);
                         subscriberList.add(subscriber);
 
-                        curState = State.PUB_LISTEN;
+                        curState = State.SUB_READ;
                     } else {
                         printError("Handshaking failed");
                         send("400 Bad Request");
@@ -66,7 +66,12 @@ public class PubSubConnection extends TCPServerConnection implements Runnable {
                     break;
                 case PUB_LISTEN: {
                     response = receive();
-                    match = Pattern.compile("PUB ([a-zA-Z0-9_-/]+) (.+)").matcher(response);
+                    if (response.equals("QUIT")) {
+                        curState = State.QUIT;
+                        break;
+                    }
+                    System.out.println(response);
+                    match = Pattern.compile("PUB ([a-zA-Z0-9_\\-\\/]+) (.+)").matcher(response);
 
                     if (match.find()) {
                         TopicTree topicTree = TopicTree.fromString(match.group(1));
@@ -76,6 +81,9 @@ public class PubSubConnection extends TCPServerConnection implements Runnable {
                             // We don't need to put this inside a synchronize block because the queue is thread-safe
                             // See: https://stackoverflow.com/questions/3661282/do-i-need-extra-synchronization-when-using-a-blockingqueue
                             messageQueue.add(new MQTTMessage(topicTree, message));
+                            send("201 OK");
+                        } else {
+                            send("401 Invalid format");
                         }
                     }
                     break;
@@ -87,7 +95,7 @@ public class PubSubConnection extends TCPServerConnection implements Runnable {
                         printClientAction("as subscriber has disconnected.");
                         subscriberList.remove(subscriber);
                     } else {
-                        match = Pattern.compile("SUB (.*)").matcher(response);
+                        match = Pattern.compile("SUB ((.+)\\/(.+)\\/(.+))").matcher(response);
                         if(match.find()) {
                             String topicTreeStr = match.group(1);
                             boolean success = subscriber.addTopicTree(topicTreeStr);

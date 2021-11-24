@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import javax.swing.plaf.ToolTipUI;
+
 public class MQTTPublisher {
     final String WILD_CARDS = "+";
     final int DEFAULT_PORT = 9000;
@@ -25,11 +27,11 @@ public class MQTTPublisher {
     public TopicTree fakeUI() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Enter the topic: ");
-        String topic = reader.readLine();
+        String topic = reader.readLine().toUpperCase();
         System.out.print("Enter the location: ");
-        String location = reader.readLine();
+        String location = reader.readLine().toUpperCase();
         System.out.print("Enter the sensor: ");
-        String sensor = reader.readLine();
+        String sensor = reader.readLine().toUpperCase();
 
         if (topic.equals(WILD_CARDS) || location.equals(WILD_CARDS) || sensor.equals(WILD_CARDS)) {
             System.out.println("Publisher can't use wild cards");
@@ -68,13 +70,13 @@ public class MQTTPublisher {
                         if(TCPClient.getResponseCode(response) == 200){
                             curState = State.PUBLISH;
                         } else {
-                            System.out.print("Handshaking failed");
+                            System.out.println("Handshaking failed");
                             curState = State.QUIT;
                         }
                         break;
 
                     case PUBLISH:
-                        System.out.print("Enter your message: ");
+                        System.out.println("Enter your message: ");
                         String tempMessage = reader.readLine();
                         if (tempMessage.equals(END_MESS)) {
                             curState = State.QUIT;
@@ -86,7 +88,7 @@ public class MQTTPublisher {
                         if(TCPClient.getResponseCode(response) == 201){
                             System.out.println("Message send");
                         } else {
-                            System.out.print("Failed to send message");
+                            System.out.println("Failed to send message");
                         }
                         break;
                     default:

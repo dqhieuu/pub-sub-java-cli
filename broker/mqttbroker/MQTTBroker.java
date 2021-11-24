@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-
 import mqttbroker.models.MQTTMessage;
 import mqttbroker.models.SubscriberSocket;
 
@@ -31,6 +30,8 @@ public class MQTTBroker {
         // so dictionary exact matching won't work)
         List<SubscriberSocket> subscriberList = Collections.synchronizedList(new ArrayList<>());
         
+        new Thread(new MessageSender(messageQueue, subscriberList)).start();
+
         while(true) {
             Socket client = server.acceptClient();
             new Thread(new PubSubConnection(client, messageQueue, subscriberList)).start();
