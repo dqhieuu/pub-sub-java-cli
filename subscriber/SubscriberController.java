@@ -30,20 +30,23 @@ public class SubscriberController implements Runnable {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         
         String in = reader.readLine();
-        String[] ret = null;
-        if (in.substring(0, 3).equals("SUB")) {
-            ret = in.split("!");
-        } else if (in.substring(0, 5).equals("QUERY")) {
-            ret = in.split("\\?");
-        } else if (in.equals("QUIT")) {
-            setIsStop(true);
-            ret = new String[2];
+        String[] ret = new String[2];
+        if (in.equals("QUIT")) {
             ret[0] = ret[1] = "QUIT";
+        } else if (in.substring(0, 3).equals("SUB")) {
+            ret = in.split("!");
+            Matcher matcher = Pattern.compile("([a-zA-Z]+)\\/([a-zA-Z]+)\\/(.+)").matcher(ret[1]);
+            if (!matcher.matches()) {
+                throw new IOException("Invalid subscribe format");
+            }
+        } else if (in.equals("QUERY?")) {
+            ret = new String[2];
+            ret[0] = ret[1] = "QUERY";
         } else {
-            System.out.println("Invalid input format!");
+            System.out.println("Invalid input format! Try again");
+            return ret;
         }
         ret[1] = ret[1].toUpperCase();
-
         return ret;
     }
 
@@ -51,20 +54,11 @@ public class SubscriberController implements Runnable {
         client.send("SUB" + " " + sensorDetail);
     }
 
-    public ArrayList<TopicMsg> query(String sensorDetail) {
-        ArrayList<TopicMsg> ret = new ArrayList<>();
-
-        Matcher match = Pattern.compile("(.+)\\/(.+)\\/(.+)").matcher(sensorDetail);
-        if(!match.find()) {
-            System.out.println("Invalid format");
-            return ret;
-        }
-        
+    public ArrayList<TopicMsg> query() {
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        ArrayList<TopicMsg> temp = new ArrayList<>();
-
         System.out.println("Now: " + now);
 
+        ArrayList<TopicMsg> temp = new ArrayList<>();
         while (messageQueue.size() > 0) {
             TopicMsg pubMessage = messageQueue.poll();
             long msgTime = pubMessage.time();
@@ -75,12 +69,9 @@ public class SubscriberController implements Runnable {
         
         for (TopicMsg pubMessage : temp) {
             this.messageQueue.add(pubMessage);
-            if (sensorDetail.equals(pubMessage.getSensorDetail())) {
-                ret.add(pubMessage);
-            }
         }
 
-        return ret;
+        return temp;
     }
 
     public void handle(String type, String data) throws IOException {
@@ -88,7 +79,7 @@ public class SubscriberController implements Runnable {
             subscribe(data);
         } else {
             System.out.println("Data in sub:");
-            ArrayList<TopicMsg> ret = query(data);
+            ArrayList<TopicMsg> ret = query();
             if (ret.size() == 0) {
                 System.out.println("Subscriber has no data");
                 return;
@@ -99,17 +90,25 @@ public class SubscriberController implements Runnable {
         }
     }
 
+    public void quit() throws IOException {
+        client.send("QUIT");
+        setIsStop(true);
+    }
+
     @Override
     public void run() {
-        System.out.println("Options (SUB!TOPIC/LOCATION/SENSOR | QUERY?TOPIC/LOCATION/SENSOR | QUIT): \n");
-        while (true) {
+        System.out.println("Options (SUB!TOPIC/LOCATION/SENSOR | QUERY? | QUIT): \n");
+        while (!isStop()) {
             try {
                 String[] input = cli();
                 if (!input[0].equals("QUIT")) {
                     handle(input[0], input[1]);
+                } else {
+                    quit();
                 }
             } catch (Exception e) {
                 System.out.println("Invalid input format! Try again");
+                e.printStackTrace();
             }
         }
     }

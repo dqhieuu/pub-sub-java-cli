@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class MQTTSubscriber {
@@ -35,14 +34,16 @@ public class MQTTSubscriber {
         }
         String sensorDetail = match.group(1);
         String msg = match.group(2);
-        System.out.println(msg);
         messageQueue.add(new TopicMsg(sensorDetail, msg));
     }
 
     private boolean isSubResp(String response) {
         Matcher match = Pattern.compile("((\\d){3})(.*)").matcher(response);
-        if (match.find()) {
+        if (match.matches()) {
             System.out.println(response);
+            if (response.equals("100 Bye Bye")) {
+                curState = State.QUIT;
+            }
             return true;
         }
         return false;
@@ -52,10 +53,6 @@ public class MQTTSubscriber {
         curState = State.HELLO;
         String response;
         while (curState != State.QUIT) {
-            if (controller.isStop()) {
-                curState = State.QUIT;
-            }
-
             switch(curState) {
                 case HELLO:
                     client.send("HELO AS SUB");
@@ -73,11 +70,9 @@ public class MQTTSubscriber {
                     if (!isSubResp(response)) {
                         addToMsgQueue(response);
                     }
-                    
                     break;
                 default:
-                    client.send("QUIT");
-                    System.out.println("Shutdown sub");
+                    break;
             }
         }
         

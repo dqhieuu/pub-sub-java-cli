@@ -1,8 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import javax.swing.plaf.ToolTipUI;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MQTTPublisher {
     final String WILD_CARDS = "+";
@@ -24,6 +24,11 @@ public class MQTTPublisher {
         client = new TCPClient(DEFAULT_ADDRESS, DEFAULT_PORT);
     }
 
+    static boolean isAllAlpha(String str) {
+        Matcher match = Pattern.compile("([a-zA-Z]+)").matcher(str);
+        return match.matches();
+    }
+
     public TopicTree fakeUI() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Enter the topic: ");
@@ -33,8 +38,18 @@ public class MQTTPublisher {
         System.out.print("Enter the sensor: ");
         String sensor = reader.readLine().toUpperCase();
 
+        if (topic.length() == 0 || location.length() == 0 || sensor.length() == 0) {
+            System.out.print("Invaid length of topic|location|sensor");
+            return null;
+        }
+
         if (topic.equals(WILD_CARDS) || location.equals(WILD_CARDS) || sensor.equals(WILD_CARDS)) {
             System.out.println("Publisher can't use wild cards");
+            return null;
+        }
+
+        if (!isAllAlpha(topic)) {
+            System.out.println("Topic only contains alphabet char");
             return null;
         }
 
