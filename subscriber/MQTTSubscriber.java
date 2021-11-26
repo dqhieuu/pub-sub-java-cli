@@ -1,5 +1,5 @@
 import java.io.IOException;
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -7,7 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class MQTTSubscriber {
     private TCPClient client;
     private State curState;
-    BlockingQueue<TopicMsg> messageQueue = new ArrayBlockingQueue<>(1000);
+    private ConcurrentHashMap<String, TopicMsg> messageQueue;
     SubscriberController controller;
 
     public enum State {
@@ -22,6 +22,7 @@ public class MQTTSubscriber {
         } else {
             client = new TCPClient(config[0], Integer.parseInt(config[1]));
         }
+        messageQueue = new ConcurrentHashMap<String, TopicMsg>();   
         controller = new SubscriberController(this.client, this.messageQueue);
     }
 
@@ -34,7 +35,7 @@ public class MQTTSubscriber {
         }
         String sensorDetail = match.group(1);
         String msg = match.group(2);
-        messageQueue.add(new TopicMsg(sensorDetail, msg));
+        messageQueue.put(sensorDetail, new TopicMsg(sensorDetail, msg));
     }
 
     private boolean isSubResp(String response) {

@@ -2,17 +2,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.sql.Timestamp;
 
 public class SubscriberController implements Runnable {
     private TCPClient client;
-    BlockingQueue<TopicMsg> messageQueue;
+    ConcurrentHashMap<String, TopicMsg> messageQueue;
     boolean stop;
 
-    public SubscriberController(TCPClient client, BlockingQueue<TopicMsg> messageQueue) {
+    public SubscriberController(TCPClient client, ConcurrentHashMap<String, TopicMsg> messageQueue) {
         this.client = client;
         this.messageQueue = messageQueue;
         this.stop = false;
@@ -58,20 +58,23 @@ public class SubscriberController implements Runnable {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         System.out.println("Now: " + now);
 
-        ArrayList<TopicMsg> temp = new ArrayList<>();
-        while (messageQueue.size() > 0) {
-            TopicMsg pubMessage = messageQueue.poll();
-            long msgTime = pubMessage.time();
-            if (now.getTime() < msgTime + 60000) {
-                temp.add(pubMessage);
+        ArrayList<String> outdatedKeys = new ArrayList<>();
+        ArrayList<TopicMsg> ret = new ArrayList<>();
+
+        for (String key : messageQueue.keySet()) {
+            TopicMsg data = messageQueue.get(key);
+            if (now.getTime() < data.time() + 60000) {
+                ret.add(data);
+            } else {
+                outdatedKeys.add(key);
             }
         }
-        
-        for (TopicMsg pubMessage : temp) {
-            this.messageQueue.add(pubMessage);
+
+        for (String key : outdatedKeys) {
+            messageQueue.remove(key);
         }
 
-        return temp;
+        return ret;
     }
 
     public void handle(String type, String data) throws IOException {
