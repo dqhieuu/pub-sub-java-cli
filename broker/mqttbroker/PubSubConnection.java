@@ -1,6 +1,9 @@
 package mqttbroker;
 
+import java.io.EOFException;
+import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
@@ -35,22 +38,23 @@ public class PubSubConnection extends TCPServerConnection implements Runnable {
 
     @Override
     public void run() {
-        String response = "";
-        Matcher match;
+        try {
+            String response = "";
+            Matcher match;
 
-        State curState = State.HELO;
-        
-        SubscriberSocket subscriber = null;
+            State curState = State.HELO;
 
-        while(curState != State.QUIT) {
-            switch(curState) {
+            SubscriberSocket subscriber = null;
+
+            while (curState != State.QUIT) {
+                switch (curState) {
                 case HELO:
                     response = receive();
-                    if(response.equals("HELO AS PUB")){
+                    if (response.equals("HELO AS PUB")) {
                         printClientAction("connected as publisher.");
                         send("200 HI");
                         curState = State.PUB_LISTEN;
-                        
+
                     } else if (response.equals("HELO AS SUB")) {
                         printClientAction("connected as subscriber.");
                         send("200 HI");
@@ -71,7 +75,7 @@ public class PubSubConnection extends TCPServerConnection implements Runnable {
                         break;
                     }
                     System.out.println(response);
-                    match = Pattern.compile("PUB ([a-zA-Z0-9_\\-\\/]+) (.+)").matcher(response);
+                    match = Pattern.compile("PUB (\\S+) (.+)").matcher(response);
 
                     if (match.find()) {
                         TopicTree topicTree = TopicTree.fromString(match.group(1));
@@ -90,16 +94,16 @@ public class PubSubConnection extends TCPServerConnection implements Runnable {
                 }
                 case SUB_READ:
                     response = receive();
-                    if(response.equals("QUIT")) {
+                    if (response.equals("QUIT")) {
                         curState = State.QUIT;
                         printClientAction("as subscriber has disconnected.");
                         subscriberList.remove(subscriber);
                     } else {
-                        match = Pattern.compile("SUB ((.+)\\/(.+)\\/(.+))").matcher(response);
-                        if(match.find()) {
+                        match = Pattern.compile("SUB (\\S+)").matcher(response);
+                        if (match.find()) {
                             String topicTreeStr = match.group(1);
                             boolean success = subscriber.addTopicTree(topicTreeStr);
-                            if(success) {
+                            if (success) {
                                 send("201 OK");
                             } else {
                                 send("401 Invalid Format");
@@ -109,10 +113,17 @@ public class PubSubConnection extends TCPServerConnection implements Runnable {
                     break;
                 default:
                     break;
+                }
             }
+
+            send("100 Bye Bye");
+        } catch (SocketException ex) {
+            printClientAction("closed the connection unexpectedly.");
+        } catch (EOFException ex) {
+            printClientAction("closed the connection.");
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
-
-        send("100 Bye Bye");
     }
 }

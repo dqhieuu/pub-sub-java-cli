@@ -28,13 +28,17 @@ public class TCPClient {
             sender = new PrintWriter(binarySender);
             binaryReceiver = new DataInputStream(socket.getInputStream());
             receiver = new BufferedReader(new InputStreamReader(binaryReceiver));
+        } catch (ConnectException e) {
+            System.out.println("Can't connect to server.");
+            System.exit(1);
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(1);
         }
     }
 
     public TCPClient() {
-        this(DEFAULT_ADDRESS,DEFAULT_PORT);
+        this(DEFAULT_ADDRESS, DEFAULT_PORT);
     }
 
     public String receive() throws IOException {
@@ -47,7 +51,7 @@ public class TCPClient {
         return tempBuffer;
     }
 
-    public void send(String message) throws IOException {
+    public void send(String message) {
         sender.println(message);
         sender.flush();
     }

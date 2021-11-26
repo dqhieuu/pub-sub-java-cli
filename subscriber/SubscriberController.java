@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 import java.sql.Timestamp;
 
 public class SubscriberController implements Runnable {
-    private TCPClient client;
-    ConcurrentHashMap<String, TopicMsg> messageQueue;
+    private final TCPClient client;
+    private final ConcurrentHashMap<String, TopicMsg> messageQueue;
     boolean stop;
 
     public SubscriberController(TCPClient client, ConcurrentHashMap<String, TopicMsg> messageQueue) {
@@ -33,9 +33,9 @@ public class SubscriberController implements Runnable {
         String[] ret = new String[2];
         if (in.equals("QUIT")) {
             ret[0] = ret[1] = "QUIT";
-        } else if (in.substring(0, 3).equals("SUB")) {
+        } else if (in.startsWith("SUB")) {
             ret = in.split("!");
-            Matcher matcher = Pattern.compile("([a-zA-Z]+)\\/([a-zA-Z]+)\\/(.+)").matcher(ret[1]);
+            Matcher matcher = Pattern.compile("((?:[\\w\\-]+|\\+))/((?:[\\w\\-]+|\\+))/((?:[\\w\\-]+|\\+))").matcher(ret[1]);
             if (!matcher.matches()) {
                 throw new IOException("Invalid subscribe format");
             }
@@ -63,7 +63,7 @@ public class SubscriberController implements Runnable {
 
         for (String key : messageQueue.keySet()) {
             TopicMsg data = messageQueue.get(key);
-            if (now.getTime() < data.time() + 60000) {
+            if (now.getTime() < data.getTime() + 60000) {
                 ret.add(data);
             } else {
                 outdatedKeys.add(key);

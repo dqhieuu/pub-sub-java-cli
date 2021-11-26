@@ -28,13 +28,9 @@ public class TCPServerConnection {
     }
 
 
-    public String receive() {
+    public String receive() throws IOException {
         String lineRead = "";
-        try {
-            lineRead = receiver.readLine().trim();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        lineRead = receiver.readLine().trim();
         return lineRead;
     }
 
@@ -43,11 +39,7 @@ public class TCPServerConnection {
         sender.flush();
     }
 
-    public void send(byte[] data) {
-        try {
-            binarySender.write(data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void send(byte[] data) throws IOException {
+        binarySender.write(data);
     }
 }

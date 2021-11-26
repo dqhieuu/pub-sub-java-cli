@@ -25,7 +25,7 @@ public class MQTTPublisher {
     }
 
     static boolean isAllAlpha(String str) {
-        Matcher match = Pattern.compile("([a-zA-Z]+)").matcher(str);
+        Matcher match = Pattern.compile("([\\w\\-]+)").matcher(str);
         return match.matches();
     }
 

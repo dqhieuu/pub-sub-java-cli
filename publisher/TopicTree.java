@@ -33,7 +33,7 @@ public class TopicTree {
     }
 
     public static TopicTree fromString(String str) {
-        var match = Pattern.compile("(.+)\\/(.+)\\/(.+)").matcher(str);
+        var match = Pattern.compile("((?:[\\w\\-]+|\\+))/((?:[\\w\\-]+|\\+))/((?:[\\w\\-]+|\\+))").matcher(str);
         if(match.find()) {
             return new TopicTree(match.group(1), match.group(2), match.group(3));
         }

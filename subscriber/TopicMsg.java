@@ -1,9 +1,10 @@
 import java.sql.Timestamp;
 
 public class TopicMsg {
-    private Timestamp timestamp;
-    private String sensorDetail;
-    private String msg;
+
+    private final Timestamp timestamp;
+    private final String sensorDetail;
+    private final String msg;
 
     public TopicMsg(String sensorDetail, String msg) {
         this.sensorDetail = sensorDetail;
@@ -11,12 +12,16 @@ public class TopicMsg {
         this.timestamp = new Timestamp(System.currentTimeMillis());
     }
 
-    public long time() {
+    public long getTime() {
         return this.timestamp.getTime();
     }
 
     public String getSensorDetail() {
         return this.sensorDetail;
+    }
+
+    public String getMessage() {
+        return msg;
     }
 
     @Override
