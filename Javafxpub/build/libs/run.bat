@@ -1,0 +1,1 @@
+java -jar --module-path lib --add-modules javafx.controls,javafx.fxml subUI-1.0-SNAPSHOT.jar
