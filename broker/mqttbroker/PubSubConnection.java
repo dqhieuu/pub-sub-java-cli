@@ -99,6 +99,17 @@ public class PubSubConnection extends TCPServerConnection implements Runnable {
                         printClientAction("as subscriber has disconnected.");
                         subscriberList.remove(subscriber);
                     } else {
+                        match = Pattern.compile("UNSUB (\\S+)").matcher(response);
+                        if (match.find()) {
+                            String topicTreeStr = match.group(1);
+                            boolean success = subscriber.removeTopicTree(topicTreeStr);
+                            if (success) {
+                                send("202 OK");
+                            } else {
+                                send("402 Could not remove");
+                            }
+                        }
+
                         match = Pattern.compile("SUB (\\S+)").matcher(response);
                         if (match.find()) {
                             String topicTreeStr = match.group(1);

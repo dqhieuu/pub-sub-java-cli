@@ -21,4 +21,14 @@ public class SubscriberSocket {
         }
         return false;
     }
+
+    public boolean removeTopicTree(String str) {
+        for(var topic: topicTrees) {
+            if(topic.toString().equals(str)) {
+                topicTrees.remove(topic);
+                return true;
+            }
+        }
+        return false;
+    }
 }

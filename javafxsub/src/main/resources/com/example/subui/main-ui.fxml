@@ -35,14 +35,14 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 
-<TabPane prefWidth="690.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17"
-         xmlns:fx="http://javafx.com/fxml/1"
-         fx:controller="com.example.subui.MainUiController"
->
+<TabPane prefWidth="690.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.subui.MainUiController">
     <Tab text="Trực quan">
-        <fx:include source="tab-visualized.fxml" fx:id="tabVisualized"/>
+        <fx:include fx:id="tabVisualized" source="tab-visualized.fxml" />
     </Tab>
     <Tab text="Kỹ thuật">
-        <fx:include source="tab-technical.fxml" fx:id="tabTechnical"/>
+        <fx:include fx:id="tabTechnical" source="tab-technical.fxml" />
+    </Tab>
+    <Tab text="Các topic" >
+        <fx:include fx:id="tabTopics" source="tab-topics.fxml" />
     </Tab>
 </TabPane>

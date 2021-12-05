@@ -31,15 +31,9 @@ public class TabTechnicalController {
 
     @FXML
     public void initialize() {
-        topic.setCellValueFactory(
-                new PropertyValueFactory<>("sensorDetail")
-        );
-        lastUpdate.setCellValueFactory(
-                new PropertyValueFactory<>("timestamp")
-        );
-        value.setCellValueFactory(
-                new PropertyValueFactory<>("msg")
-        );
+        topic.setCellValueFactory(new PropertyValueFactory<>("sensorDetail"));
+        lastUpdate.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
+        value.setCellValueFactory(new PropertyValueFactory<>("msg"));
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),
                 ae -> {

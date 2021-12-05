@@ -48,6 +48,10 @@ public class MQTTSubscriber implements Runnable {
         client.send("SUB" + " " + sensorDetail);
     }
 
+    public void unsubscribe(String sensorDetail) {
+        client.send("UNSUB" + " " + sensorDetail);
+    }
+
     public void quit() {
         client.send("QUIT");
         curState = State.QUIT;
