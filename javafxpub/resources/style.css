@@ -1,0 +1,41 @@
+.active-box {
+    -fx-pref-width: 59px;
+    -fx-pref-height: 45px;
+    -fx-alignment: center;
+}
+
+.topic-box {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 100px;
+    -fx-alignment: center;
+}
+
+.location-box {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 100px;
+    -fx-alignment: center;
+}
+
+.sensor-box {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 100px;
+    -fx-alignment: center;
+}
+
+.emit-function-box {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 100px;
+    -fx-alignment: center;
+}
+
+.frequency-box {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 100px;
+    -fx-alignment: center;
+}
+
+.discard-box {
+    -fx-pref-width: 59px;
+    -fx-pref-height: 66px;
+    -fx-alignment: center;
+}
