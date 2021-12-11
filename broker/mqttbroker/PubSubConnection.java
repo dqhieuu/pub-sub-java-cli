@@ -108,6 +108,7 @@ public class PubSubConnection extends TCPServerConnection implements Runnable {
                             } else {
                                 send("402 Could not remove");
                             }
+                            break;
                         }
 
                         match = Pattern.compile("SUB (\\S+)").matcher(response);

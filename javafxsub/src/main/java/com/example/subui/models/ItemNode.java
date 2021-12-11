@@ -71,7 +71,7 @@ public class ItemNode {
 
         if (itemType == ItemType.NULL) return null;
 
-        Matcher match = Pattern.compile("([\\w\\-]+)/([\\w\\-]+)/([\\w\\-]+)").matcher(topicMsg.getSensorDetail());
+        Matcher match = Pattern.compile("([\\w\\-]+|\\+)/([\\w\\-]+|\\+)/([\\w\\-]+|\\+)").matcher(topicMsg.getSensorDetail());
 
         if(!match.find()) return null;
 
