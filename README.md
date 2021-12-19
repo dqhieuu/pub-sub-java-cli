@@ -6,8 +6,10 @@ Bộ 3 chương trình sử dụng 1 giao thức tương tự MQTT. Mô phỏng 
 - **Broker**: Server phân phối message gửi giữa các publisher, subscriber. Sử dụng 1 hàng chờ để xử lý tuần tự, thread-safe (dựa trên pattern Message queue)
 
 Trong repo này gồm 5 folder
-- `broker` thực hiện chức năng điều phối, message broker trong queue. Sử dụng hoàn toàn các container thread-safe, nên không cần phải đặt
-- publisher và sub
+- `broker` chứa mã nguồn ứng dụng broker, giao diện dòng lệnh
+- `javafxpub` chứa mã nguồn ứng dụng publisher giao diện đồ hoạ
+- `javafxsub` chứa mã nguồn ứng dụng subscriber giao diện đồ hoạ
+- `publisher` và `subscriber` chứa mã nguồn cũ của pub và sub giao diện dòng lệnh (CLI)
 
 ## Phân công công việc
 ### Phần giao diện/ tính năng CLI
