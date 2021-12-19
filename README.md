@@ -42,3 +42,14 @@ Tại thư mục `./build/libs/` được sinh ra, copy thư viện javafx ứng
 - Đỗ Hồng Hà làm giao diện publisher (ứng dụng giả lập các thiết bị smart home)
 
 ## Hình ảnh
+![image](https://user-images.githubusercontent.com/63568218/146670351-73aa8939-b98e-4c6a-b36a-c8e0c20ccf11.png)
+
+![image](https://user-images.githubusercontent.com/63568218/146670355-2afa7908-7096-4a2a-9999-633df9cbea71.png)
+
+![image](https://user-images.githubusercontent.com/63568218/146670359-76d42377-05cb-4adf-93d8-cdd58dfc7e7e.png)
+
+![image](https://user-images.githubusercontent.com/63568218/146670364-78393d4f-f926-4ed6-ab7d-e703bf7d1a27.png)
+
+![image](https://user-images.githubusercontent.com/63568218/146670371-10a6c1a4-e544-4668-95e8-258ee5a6af98.png)
+
+![image](https://user-images.githubusercontent.com/63568218/146670375-d1d4af7b-98cc-4da4-a84c-ea34cb845b57.png)
