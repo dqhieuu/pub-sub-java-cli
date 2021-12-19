@@ -7,13 +7,13 @@ Bộ 3 chương trình sử dụng 1 giao thức tương tự MQTT. Mô phỏng 
 
 Trong repo này gồm 5 folder
 - `broker` chứa mã nguồn ứng dụng broker, giao diện dòng lệnh
-- `javafxpub` chứa mã nguồn ứng dụng publisher giao diện đồ hoạ
-- `javafxsub` chứa mã nguồn ứng dụng subscriber giao diện đồ hoạ
-- `publisher` và `subscriber` chứa mã nguồn cũ của pub và sub giao diện dòng lệnh (CLI)
+- `javafxpub` chứa mã nguồn ứng dụng publisher, giao diện đồ hoạ
+- `javafxsub` chứa mã nguồn ứng dụng subscriber, giao diện đồ hoạ
+- `publisher` và `subscriber` chứa mã nguồn cũ của pub và sub, giao diện dòng lệnh (CLI)
 
 ## Phân công công việc
 ### Phần giao diện/ tính năng CLI
-- Đào Quang Hiếu & Đỗ Hồng Hà làm phần broker collab trên Code with me
+- Đào Quang Hiếu & Đỗ Hồng Hà làm phần broker, collab trên Code with me
 - Đỗ Hồng Hà làm phần publisher
 - Lê Vũ Quang làm subsciber
 
