@@ -15,7 +15,7 @@ public class TCPServer {
     public TCPServer(int port) {
         try {
             server = new ServerSocket(port);
-            System.out.println("Server started.");
+            System.out.println("Server started at port "+ port + ".");
         } catch (IOException e) {
             e.printStackTrace();
         }

