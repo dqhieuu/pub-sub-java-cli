@@ -13,21 +13,23 @@ Trong repo này gồm 5 folder
 
 ## Cài đặt
 ### Lưu ý
-Ứng dụng yêu cầu compile chạy với phiên bản **Java >= 17.0**
+Ứng dụng yêu cầu compile và chạy với phiên bản **Java >= 17.0**
 
 ### Đối với 2 ứng dụng GUI
 Để build ứng dụng, với 2 source code javafx của publisher và subscriber, chạy lệnh
 
 `gradlew jar`
 
-Tại thư mục `./build/libs/` được sinh ra, copy thư viện javafx ứng với hệ điều hành cần chạy vào đây (tải tại https://gluonhq.com/products/javafx/ rồi copy nội dung trong thư mục `javafx-sdk-*` trong file `.zip` vào) và chạy:
+Tại thư mục `./build/libs/` được sinh ra, copy thư viện javafx ứng với hệ điều hành cần chạy vào đây (tải tại https://gluonhq.com/products/javafx/ rồi copy nội dung trong thư mục `javafx-sdk-*` trong file `.zip` vào thư mục chứa file jar) và chạy:
 
 `java -jar --module-path lib --add-modules javafx.controls,javafx.fxml <tên_file_jar>.jar`
 
 ### Đối với các ứng dụng CLI còn lại
-**Cách 1:** Sử dụng IDE/ text editor có hỗ trợ compile và chạy code java, rồi chạy với entry là tệp chứa hàm `main` trong thư mục đó.
+**Cách 1:** Sử dụng IDE/text editor có hỗ trợ compile và chạy code java, rồi chạy với entry là tệp chứa hàm `main` trong thư mục đó.
 
-**Cách 2:** Sử dụng compiler của java, include tất cả các file trong thư mục vào, với entry là file chứa hàm main để build ra 1 file .jar
+**Cách 2:** Sử dụng compiler của java, include tất cả các file `.java` trong thư mục vào, với entry là file chứa hàm main để build ra 1 file `.jar`
+
+**Cách 3:** Tạo mới 1 project gradle/maven, copy các file mã nguồn trong folder vào. Trong file config nhập entry là thư mục chứa hàm main. Tạo 1 command để build jar/fatjar (tham khảo trên trang docs của build tool tương ứng)
 
 ## Phân công công việc
 ### Phần giao diện/ tính năng CLI
