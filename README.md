@@ -11,6 +11,8 @@ Trong repo này gồm 5 folder
 - `javafxsub` chứa mã nguồn ứng dụng subscriber, giao diện đồ hoạ
 - `publisher` và `subscriber` chứa mã nguồn cũ của pub và sub, giao diện dòng lệnh (CLI)
 
+Mô tả giao thức: https://docs.google.com/document/d/1mnQiARtPLRhIgPCVo_Ezg0cnaaAnJfK_KQo0pJC4-HM/edit?usp=sharing
+
 ## Cài đặt
 ### Lưu ý
 Ứng dụng yêu cầu compile và chạy với phiên bản **Java >= 17.0**
